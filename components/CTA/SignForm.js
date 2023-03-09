@@ -66,11 +66,14 @@ const SignForm = () => {
     }
   };
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setError("");
-      setSuccess("");
-    }, 3000);
-    return () => clearTimeout(timer);
+    if (!isLoading) {
+      const timer = setTimeout(() => {
+        setError("");
+        setSuccess("");
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
   }, [isLoading]);
   return (
     <Form submitHandler={getUserInfoHandler}>

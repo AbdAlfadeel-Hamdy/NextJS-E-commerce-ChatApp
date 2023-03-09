@@ -86,12 +86,12 @@ const SignForm = () => {
       <FormControl name="password" id="password" type="text">
         Password
       </FormControl>
-      <div className="flex gap-1 md:gap-4  items-center mt-4">
+      <div className="flex flex-col gap-y-2 md:gap-y-4 mt-4">
         <Button secondary onClick={getUserInfoHandler}>
           Sign {isLoggingIn ? "In" : "Up"}
         </Button>
         {isLoading && (
-          <div className="flex justify-center flex-wrap-none flex-1">
+          <div className="flex  flex-wrap-none flex-1">
             <BeatLoader color="white" size={20} margin={10} />
           </div>
         )}

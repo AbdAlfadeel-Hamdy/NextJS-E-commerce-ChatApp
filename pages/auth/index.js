@@ -1,7 +1,12 @@
-import UserForm from "@/components/auth/UserForm";
+import SignForm from "@/components/CTA/SignForm";
+import { SignContextProvider } from "@/context/sign-context";
 
 const AuthPage = () => {
-  return <UserForm />;
+  return (
+    <SignContextProvider>
+      <SignForm />
+    </SignContextProvider>
+  );
 };
 
 export default AuthPage;

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { IoMenuSharp, IoCloseSharp } from "react-icons/io5";
+import Button from "./Button";
 
 const MainNavigation = () => {
   const [menuIsOpened, setMenuIsOpened] = useState(false);
@@ -11,8 +12,8 @@ const MainNavigation = () => {
     setMenuIsOpened(false);
   };
   return (
-    <nav className="bg-blue-600 h-12 md:h-16 p-2 md:p-8 flex items-center justify-between text-white">
-      <h3 className=" md:text-xl font-bold">
+    <nav className="bg-white h-12 md:h-16 p-2 md:p-8 flex items-center justify-between text-white">
+      <h3 className="text-blue-600 md:text-xl font-bold">
         <Link href="/">Gonzalo's Store</Link>
       </h3>
       {!menuIsOpened && (
@@ -39,6 +40,9 @@ const MainNavigation = () => {
           <Link href="/welcome">Log Out</Link>
         </li>
       </ul>
+      <Button primary href="/auth">
+        Login
+      </Button>
     </nav>
   );
 };

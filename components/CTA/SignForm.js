@@ -4,9 +4,10 @@ import Button from "../UI/Button";
 import FormControl from "../UI/FormControl";
 import SignContext from "@/context/sign-context";
 import { BeatLoader } from "react-spinners";
+import { signIn } from "next-auth/react";
 
 const signUpHandler = async (userInfo) => {
-  return await fetch("/api/signup", {
+  return await fetch("/api/auth/signup", {
     method: "POST",
     body: JSON.stringify(userInfo),
     headers: {
@@ -14,13 +15,12 @@ const signUpHandler = async (userInfo) => {
     },
   });
 };
+// Sign In Handler
 const signInHandler = async (userInfo) => {
-  fetch("/api/signin", {
-    method: "POST",
-    body: JSON.stringify(userInfo),
-    headers: {
-      "Content-Type": "application/json",
-    },
+  return await signIn("credentials", {
+    redirect: false,
+    email: userInfo.email,
+    password: userInfo.password,
   });
 };
 
@@ -36,16 +36,31 @@ const SignForm = () => {
     setIsLoggingIn((prevState) => !prevState);
     signCtx.setEmail("");
     signCtx.setPassword("");
+    setError("");
+    setSuccess("");
   };
 
   const getUserInfoHandler = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (isLoggingIn) {
-      signInHandler({ email: signCtx.email, password: signCtx.password });
+      try {
+        const response = await signInHandler({
+          email: signCtx.email,
+          password: signCtx.password,
+        });
+        setIsLoading(false);
+        if (response.error)
+          throw new Error(response.error || "Something went wrong!");
+        setSuccess("Signing you in...");
+        setError(false);
+        signCtx.setPassword("");
+        signCtx.setEmail("");
+      } catch (err) {
+        setError(err.message);
+      }
     } else {
-      setIsLoading(true);
-
       try {
         const response = await signUpHandler({
           email: signCtx.email,
@@ -53,7 +68,6 @@ const SignForm = () => {
         });
         setIsLoading(false);
         const data = await response.json();
-        console.log(data);
         if (!response.ok)
           throw new Error(data.message || "Something went wrong!");
         setSuccess(data.message);
@@ -96,7 +110,7 @@ const SignForm = () => {
           </div>
         )}
         {!isLoading && <p>{error}</p>}
-        {!isLoading && !error && <p>{success}</p>}
+        {!isLoading && !error && success && <p>{success}</p>}
       </div>
       <div>
         <span>
